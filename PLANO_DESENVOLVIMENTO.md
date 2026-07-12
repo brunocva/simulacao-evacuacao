@@ -67,3 +67,73 @@ Criar um simulador simples de evacuacao em predio, inspirado na estrutura do pro
 - Comparativo final passou a gerar leitura interpretativa automatica por cenario.
 - CSV `output/estatisticas-cenarios.csv` adicionado para graficos e analises do artigo.
 - Documentos redundantes foram reduzidos: `texto_pibic.md` ficou como texto academico principal e `RELATORIO_TECNICO.md` como nota tecnica curta.
+
+## Planejamento Atual
+
+Este planejamento registra os proximos passos combinados para deixar o projeto mais forte como simulador, como experimento de PIBIC e como material de apresentacao.
+
+### Prioridade 1 - Interface grafica para demonstracao
+
+Objetivo: melhorar o dashboard Swing para que a simulacao fique mais clara durante apresentacoes, bancas e gravacoes.
+
+Melhorias previstas:
+
+1. Adicionar legenda visual para pessoas, saida, risco, obstaculos e grafo.
+2. Reorganizar as metricas em um painel lateral ou superior mais legivel.
+3. Separar metricas principais em blocos: ciclo, pessoas no predio, evacuadas, rejeicoes, panico medio, tempo medio e orientacoes.
+4. Destacar visualmente pessoas com estado especial, como panico elevado ou orientacao recente do brigadista.
+5. Adicionar opcao para exibir ou ocultar o grafo no painel.
+6. Melhorar espacamento, fontes, contraste e acabamento visual para capturas de tela.
+7. Avaliar botoes de controle, como pausar, continuar, reiniciar e salvar imagem da tela.
+
+Primeira entrega recomendada:
+
+1. Legenda.
+2. Painel de metricas reorganizado.
+3. Alternancia de exibicao do grafo.
+4. Destaque da ultima orientacao do brigadista.
+
+### Prioridade 2 - Evidencias experimentais para o PIBIC
+
+Objetivo: gerar dados suficientes para sustentar a discussao do `texto_pibic.md`.
+
+Melhorias previstas:
+
+1. Rodar bateria maior de repeticoes por cenario, usando `scripts/executar_repeticoes.sh`.
+2. Preservar `SEED_BASE`, quantidade de repeticoes e data da bateria experimental.
+3. Usar `output/estatisticas-cenarios.csv` para gerar graficos de media, desvio e deltas contra o baseline.
+4. Usar `output/metricas-ciclos.csv` para gerar graficos de evolucao temporal.
+5. Atualizar o `texto_pibic.md` com resultados observados somente depois da bateria maior.
+
+### Prioridade 3 - Graficos e apresentacao
+
+Objetivo: transformar as saidas CSV em material visual para relatorio e apresentacao.
+
+Graficos recomendados:
+
+1. Tempo medio de evacuacao por cenario.
+2. Taxa de evacuacao por cenario.
+3. Panico medio por cenario.
+4. Movimentos rejeitados por cenario.
+5. Deltas em relacao ao baseline `SEM_BRIGADISTA`.
+6. Evolucao por ciclo para um ou dois cenarios representativos.
+
+### Prioridade 4 - Refinamentos tecnicos futuros
+
+Objetivo: melhorar a qualidade do modelo sem aumentar demais a complexidade.
+
+Possibilidades:
+
+1. Refinar pesos dinamicos do grafo considerando risco e congestionamento.
+2. Testar novas politicas de decisao para `PessoaAgent`.
+3. Comparar estrategias diferentes de `BrigadistaAgent`.
+4. Registrar configuracao completa de cada execucao em arquivo de metadados.
+5. Avaliar suporte a multiplas saidas ou bloqueios dinamicos.
+
+## Repositorio
+
+O projeto foi versionado em um repositorio Git proprio e enviado para:
+
+```text
+https://github.com/brunocva/simulacao-evacuacao
+```
