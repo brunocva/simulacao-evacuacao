@@ -1,0 +1,13 @@
+out/
+bin/
+target/
+build/
+*.class
+*.log
+*.tmp
+output/
+APDescription.txt
+MTPs-Main-Container.txt
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/shelf/
