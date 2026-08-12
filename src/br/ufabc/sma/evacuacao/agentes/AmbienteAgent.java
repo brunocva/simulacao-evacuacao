@@ -45,6 +45,7 @@ public class AmbienteAgent extends Agent {
     private int orientacoesBrigadista = 0;
     private int cicloAtual = 0;
     private String ultimaOrientacaoBrigadista = "nenhuma";
+    private String pessoaOrientadaBrigadista;
     private CenarioSimulacao cenario = CenarioSimulacao.COM_BRIGADISTA;
     private DashboardFrame dashboard;
 
@@ -156,8 +157,19 @@ public class AmbienteAgent extends Agent {
         orientacoesBrigadista++;
         if (descricao != null && !descricao.isBlank()) {
             ultimaOrientacaoBrigadista = descricao;
+            pessoaOrientadaBrigadista = extrairPessoaOrientada(descricao);
         }
         atualizarDashboard();
+    }
+
+    private String extrairPessoaOrientada(String descricao) {
+        String marcador = " orientou ";
+        int inicio = descricao.indexOf(marcador);
+        int fim = descricao.indexOf(" para ", inicio + marcador.length());
+        if (inicio >= 0 && fim > inicio) {
+            return descricao.substring(inicio + marcador.length(), fim).trim();
+        }
+        return null;
     }
 
     private void responderConsulta(ACLMessage msg) throws IOException {
@@ -336,6 +348,15 @@ public class AmbienteAgent extends Agent {
                 ));
     }
 
+    private Map<String, Integer> panicosPorNome() {
+        return panicos.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey().getLocalName(),
+                        Map.Entry::getValue
+                ));
+    }
+
     private int panicoMedio() {
         if (panicos.isEmpty()) {
             return 0;
@@ -381,6 +402,8 @@ public class AmbienteAgent extends Agent {
                 orientacoesBrigadista,
                 tempoMedioEvacuacao(),
                 ultimaOrientacaoBrigadista,
+                pessoaOrientadaBrigadista,
+                panicosPorNome(),
                 metricasGrafo
         );
     }

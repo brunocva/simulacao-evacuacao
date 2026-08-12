@@ -16,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Comparator;
 
 public class PainelPredio extends JPanel {
 
@@ -23,6 +24,9 @@ public class PainelPredio extends JPanel {
     private final Predio predio;
     private final GrafoPredio grafoPredio;
     private Map<String, Posicao> pessoas = new HashMap<>();
+    private Map<String, Integer> panicos = new HashMap<>();
+    private String pessoaOrientada;
+    private boolean mostrarGrafo = true;
 
     public PainelPredio(Predio predio, GrafoPredio grafoPredio) {
         this.predio = predio;
@@ -31,8 +35,15 @@ public class PainelPredio extends JPanel {
         setBackground(new Color(250, 250, 248));
     }
 
-    public void atualizarPessoas(Map<String, Posicao> pessoas) {
+    public void atualizarPessoas(Map<String, Posicao> pessoas, Map<String, Integer> panicos, String pessoaOrientada) {
         this.pessoas = new HashMap<>(pessoas);
+        this.panicos = new HashMap<>(panicos);
+        this.pessoaOrientada = pessoaOrientada;
+        repaint();
+    }
+
+    public void setMostrarGrafo(boolean mostrarGrafo) {
+        this.mostrarGrafo = mostrarGrafo;
         repaint();
     }
 
@@ -48,7 +59,9 @@ public class PainelPredio extends JPanel {
         int tamanho = Math.max(24, Math.min(larguraCelula, alturaCelula));
 
         desenharGrade(g2, tamanho);
-        desenharArestas(g2, tamanho);
+        if (mostrarGrafo) {
+            desenharArestas(g2, tamanho);
+        }
         desenharPessoas(g2, tamanho);
 
         g2.dispose();
@@ -104,21 +117,45 @@ public class PainelPredio extends JPanel {
 
     private void desenharPessoas(Graphics2D g2, int tamanho) {
         int indice = 1;
-        for (Map.Entry<String, Posicao> entry : pessoas.entrySet()) {
+        for (Map.Entry<String, Posicao> entry : pessoas.entrySet()
+                .stream()
+                .sorted(Comparator.comparingInt(entry -> indicePessoa(entry.getKey())))
+                .toList()) {
             Posicao posicao = entry.getValue();
             int px = MARGEM + posicao.x() * tamanho;
             int py = MARGEM + posicao.y() * tamanho;
             int diametro = Math.max(14, tamanho - 14);
             int deslocamento = (tamanho - diametro) / 2;
+            int panico = panicos.getOrDefault(entry.getKey(), 0);
+            boolean orientada = entry.getKey().equals(pessoaOrientada);
 
-            g2.setColor(new Color(47, 102, 170));
+            g2.setColor(panico >= 60 ? new Color(190, 67, 54) : new Color(47, 102, 170));
             g2.fillOval(px + deslocamento, py + deslocamento, diametro, diametro);
-            g2.setColor(new Color(20, 54, 96));
+            g2.setColor(panico >= 60 ? new Color(118, 38, 32) : new Color(20, 54, 96));
             g2.drawOval(px + deslocamento, py + deslocamento, diametro, diametro);
+
+            if (orientada) {
+                g2.setColor(new Color(242, 201, 76));
+                g2.setStroke(new BasicStroke(3f));
+                g2.drawOval(px + deslocamento - 4, py + deslocamento - 4, diametro + 8, diametro + 8);
+                g2.setStroke(new BasicStroke(1f));
+            }
 
             desenharTextoCentralizado(g2, String.valueOf(indice), px, py, tamanho, Color.WHITE);
             indice++;
         }
+    }
+
+    private int indicePessoa(String nome) {
+        int separador = nome.lastIndexOf('-');
+        if (separador >= 0 && separador < nome.length() - 1) {
+            try {
+                return Integer.parseInt(nome.substring(separador + 1));
+            } catch (NumberFormatException ignored) {
+                // usa ordenacao alfabetica no fallback abaixo
+            }
+        }
+        return Integer.MAX_VALUE;
     }
 
     private void desenharTextoCentralizado(Graphics2D g2, String texto, int x, int y, int tamanho, Color cor) {

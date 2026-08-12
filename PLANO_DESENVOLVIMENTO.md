@@ -67,6 +67,10 @@ Criar um simulador simples de evacuacao em predio, inspirado na estrutura do pro
 - Comparativo final passou a gerar leitura interpretativa automatica por cenario.
 - CSV `output/estatisticas-cenarios.csv` adicionado para graficos e analises do artigo.
 - Documentos redundantes foram reduzidos: `texto_pibic.md` ficou como texto academico principal e `RELATORIO_TECNICO.md` como nota tecnica curta.
+- Dashboard Swing reorganizado com metricas em blocos para apresentacao.
+- Legenda visual adicionada para pessoas, panico alto, orientacao, saida, risco, obstaculos e grafo.
+- Alternancia de exibicao do grafo adicionada ao dashboard.
+- Pessoas com panico alto e ultima pessoa orientada pelo brigadista passaram a receber destaque visual.
 
 ## Planejamento Atual
 
@@ -88,10 +92,10 @@ Melhorias previstas:
 
 Primeira entrega recomendada:
 
-1. Legenda.
-2. Painel de metricas reorganizado.
-3. Alternancia de exibicao do grafo.
-4. Destaque da ultima orientacao do brigadista.
+1. Legenda. Concluido.
+2. Painel de metricas reorganizado. Concluido.
+3. Alternancia de exibicao do grafo. Concluido.
+4. Destaque da ultima orientacao do brigadista. Concluido.
 
 ### Prioridade 2 - Evidencias experimentais para o PIBIC
 
